@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,4 +5,45 @@ generator client {
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+model Colaborador {
+  idColaborador String    @id @default(uuid())
+  idFat         String    @default(uuid())
+  saldo         Float     @default(0.00)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime
+  idTipo        Int
+  Despesa       Despesa[]
+
+  @@map("colaboradores")
+}
+
+model TipoDespesa {
+  idTipo        String    @id @default(uuid())
+  descricaoTipo String
+  Despesa       Despesa[]
+
+  @@map("TiposDespesas")
+}
+
+model Despesa {
+  idDespesa      String   @id @default(uuid())
+  IdDespesaOwner String
+  IdTipoDespesa  String
+  idMoeda        Int
+  valor          Float
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime
+  dataDespesa    DateTime
+  localDespesa   String
+  comentario     String?
+  imageNF        String?
+  idStatus       Int
+  dateApproved   DateTime
+
+  TipoDespesa TipoDespesa @relation(fields: [IdTipoDespesa], references: [idTipo])
+  Colaborador Colaborador @relation(fields: [IdDespesaOwner], references: [idColaborador])
+
+  @@map("Despesas")
 }
