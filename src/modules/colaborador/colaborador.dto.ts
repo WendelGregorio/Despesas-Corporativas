@@ -1,8 +1,7 @@
 export type ColaboradorDTO = {
     idColaborador: string;
-    idFat:         string;
-    saldo:         number;
+    saldo:          number;
     createdAt?:     Date;
-    updatedAt:     Date;
-    idTipo:        number;
+    updatedAt:      Date;
+    idTipo:         number;
 }

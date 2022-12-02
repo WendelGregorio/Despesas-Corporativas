@@ -8,8 +8,7 @@ datasource db {
 }
 
 model Colaborador {
-  idColaborador String    @id @default(uuid())
-  idFat         String    @default(uuid())
+  idColaborador String    @id
   saldo         Float     @default(0.00)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime
@@ -28,19 +27,20 @@ model TipoDespesa {
 }
 
 model Despesa {
-  idDespesa      String   @id @default(uuid())
+  idDespesa      String    @id @default(uuid())
+  idFat          String    @default(uuid())
   IdDespesaOwner String
   IdTipoDespesa  String
   idMoeda        Int
   valor          Float
-  createdAt      DateTime @default(now())
+  createdAt      DateTime  @default(now())
   updatedAt      DateTime
   dataDespesa    DateTime
   localDespesa   String
   comentario     String?
   imageNF        String?
   idStatus       Int
-  dateApproved   DateTime
+  dateApproved   DateTime?
 
   TipoDespesa TipoDespesa @relation(fields: [IdTipoDespesa], references: [idTipo])
   Colaborador Colaborador @relation(fields: [IdDespesaOwner], references: [idColaborador])
