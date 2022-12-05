@@ -1,4 +1,4 @@
 export type TipoDespesaDTO = {
-    idTipo:         String;
-    descricaoTipo:  String;
+    idTipo:             number;
+    descricaoTipo:      string;
 }

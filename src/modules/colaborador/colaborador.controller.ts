@@ -16,6 +16,11 @@ export class ColaboradorController {
     return this.colaboradorService.findAll();
   }
 
+  @Get(":id")
+  async findOne(@Param("id") id: string) {
+    return this.colaboradorService.findOne(id);
+  }
+
   @Put(":id")
   async update(@Param("id") id: string, @Body() data: ColaboradorDTO) {
     return this.colaboradorService.update(id, data);

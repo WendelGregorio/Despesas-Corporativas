@@ -19,7 +19,7 @@ model Colaborador {
 }
 
 model TipoDespesa {
-  idTipo        String    @id @default(uuid())
+  idTipo        Int       @id
   descricaoTipo String
   Despesa       Despesa[]
 
@@ -30,7 +30,7 @@ model Despesa {
   idDespesa      String    @id @default(uuid())
   idFat          String    @default(uuid())
   IdDespesaOwner String
-  IdTipoDespesa  String
+  IdTipoDespesa  Int
   idMoeda        Int
   valor          Float
   createdAt      DateTime  @default(now())

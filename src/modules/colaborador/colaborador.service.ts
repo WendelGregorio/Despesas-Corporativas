@@ -5,9 +5,7 @@ import { ColaboradorDTO } from './colaborador.dto';
 @Injectable()
 export class ColaboradorService {
 
-    constructor(private prisma: PrismaService) {
-
-    }
+    constructor(private prisma: PrismaService) {}
 
     async exists(data: ColaboradorDTO){
         const colaboradorExists = await this.prisma.colaborador.findFirst({
@@ -37,6 +35,14 @@ export class ColaboradorService {
 
     async findAll() {
         return await this.prisma.colaborador.findMany()
+    }
+
+    async findOne(id: string) {
+        return await this.prisma.colaborador.findUnique({
+            where: {
+                idColaborador: id
+            }
+        })
     }
 
     async update(id: string, data: ColaboradorDTO) {

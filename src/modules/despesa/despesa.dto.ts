@@ -1,15 +1,16 @@
 export type DespesaDTO = {
-    idDespesa?:         String;
-    IdDespesaOwner:     String;
-    IdTipoDespesa:      String;
-    idMoeda:            Number;
-    valor:              Number;
-    createdAt?:         Date;
-    updatedAt?:         Date;
-    dataDespesa:        Date;
-    localDespesa:       String;
-    comentario?:        String;
-    imageNF?:           String;
-    idStatus:           Number;
-    dateApproved?:      Date;
+    idDespesa?:      string;
+    idFat?:          string;
+    IdDespesaOwner: string;
+    IdTipoDespesa:  number;
+    idMoeda:        number;
+    valor:          number;
+    createdAt:      Date;
+    updatedAt:      Date;
+    dataDespesa:    Date;
+    localDespesa:   string;
+    comentario?:     string;
+    imageNF?:        string;
+    idStatus:       number;
+    dateApproved:   Date;
 }
