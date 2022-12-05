@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Res, Response } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ColaboradorDTO } from './colaborador.dto';
 import { ColaboradorService } from './colaborador.service';
 
+@ApiTags('Colaboradores')
 @Controller('colaborador')
 export class ColaboradorController {
   constructor(private readonly colaboradorService: ColaboradorService) {}
