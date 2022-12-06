@@ -5,6 +5,7 @@ import { PrismaService } from '../../database/PrismaService';
 
 @Module({
   controllers: [ColaboradorController],
-  providers: [ColaboradorService, PrismaService]
+  providers: [ColaboradorService, PrismaService],
+  exports: [ColaboradorService]
 })
 export class ColaboradorModule {}

@@ -1,14 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class DespesaDTO {
+export class CreateDespesaDto {
     @ApiProperty()
-    idDespesa?:      string;
-
-    @ApiProperty()
-    idFat?:          string;
-
-    @ApiProperty()
-    IdDespesaOwner: string;
+    IdDespesaOwner: number;
 
     @ApiProperty()
     IdTipoDespesa:  number;

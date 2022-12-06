@@ -1,6 +1,7 @@
-import { Controller, Post, Body, Get, Put, Delete, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Put, Delete, Param, ParseIntPipe } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { DespesaDTO } from './despesa.dto';
+import { CreateDespesaDto } from './dto/create-despesa.dto';
+import { UpdateDespesaDto } from './dto/update-despesa.dto';
 import { DespesaService } from './despesa.service';
 
 @ApiTags('Despesas')
@@ -9,7 +10,7 @@ export class DespesaController {
   constructor(private readonly despesaService: DespesaService) {}
 
   @Post()
-  async create(@Body() data: DespesaDTO) {
+  async create(@Body() data: CreateDespesaDto) {
     return this.despesaService.create(data);
   }
 
@@ -19,17 +20,17 @@ export class DespesaController {
   }
 
   @Get(":id")
-  async findOne(@Param("id") id: string) {
+  async findOne(@Param("id", ParseIntPipe) id: number) {
     return this.despesaService.findOne(id);
   }
 
   @Put(":id")
-  async update(@Param("id") id: string, @Body() data: DespesaDTO) {
+  async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateDespesaDto) {
     return this.despesaService.update(id, data);
   }
 
   @Delete(":id")
-  async delete(@Param("id") id: string) {
+  async delete(@Param("id", ParseIntPipe) id: number) {
     return this.despesaService.delete(id);
   }
 }

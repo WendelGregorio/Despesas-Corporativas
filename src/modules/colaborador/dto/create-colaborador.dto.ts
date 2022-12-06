@@ -1,12 +1,24 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class ColaboradorDTO {
-    
+export class CreateColaboradorDto {
+
     @ApiProperty({
-        description:'idColaborador é o número de matrícula do colaborador, utilizado para associar às despesas',
+        description:'Nome do colaborador',
+        example:'Wendel Gregorio'
+    })
+    nome: string;
+
+    @ApiProperty({
+        description:'Registro do colaborador',
         example:'40553'
     })
-    idColaborador: string;
+    registro: string;
+
+    @ApiProperty({
+        description:'Senha do colaborador',
+        example:'40553'
+    })
+    senha: string;
 
     @ApiProperty({
         description:'O saldo é valor de andiantamento que o colaborador recebeu para utilizar com as despesas',

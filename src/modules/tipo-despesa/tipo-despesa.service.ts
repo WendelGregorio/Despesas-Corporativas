@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/PrismaService';
-import { TipoDespesaDTO } from './tipo-despesa.dto';
+import { CreateTipoDespesaDto } from './dto/create-tipo-despesa.dto';
+import { UpdateTipoDespesaDto } from './dto/update-tipo-despesa.dto';
 
 @Injectable()
 export class TipoDespesaService {
     constructor(private prisma: PrismaService) {}
 
-    async exists(data: TipoDespesaDTO){
+    async exists(data: CreateTipoDespesaDto){
         const tipoDespesaExiste = await this.prisma.tipoDespesa.findFirst({
             where: data
         })
@@ -18,7 +19,7 @@ export class TipoDespesaService {
         }
     }
 
-    async create(data: TipoDespesaDTO){
+    async create(data: CreateTipoDespesaDto){
         
         if(!(await this.exists(data))){
             const tipoDespesa = await this.prisma.tipoDespesa.create({
@@ -44,7 +45,7 @@ export class TipoDespesaService {
         })
     }
 
-    async update(id: number, data: TipoDespesaDTO) {
+    async update(id: number, data: UpdateTipoDespesaDto) {
         const tipoDespesaExiste = await this.prisma.tipoDespesa.findUnique({
             where: {
                 idTipo: id

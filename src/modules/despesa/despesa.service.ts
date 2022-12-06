@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/PrismaService';
-import { DespesaDTO } from './despesa.dto';
+import { CreateDespesaDto } from './dto/create-despesa.dto';
+import { UpdateDespesaDto } from './dto/update-despesa.dto';
 
 @Injectable()
 export class DespesaService {
     constructor(private prisma: PrismaService) {}
 
-    async exists(data: DespesaDTO){
+    async exists(data: CreateDespesaDto){
         const despesaExiste = await this.prisma.despesa.findFirst({
             where: data
         })
@@ -18,7 +19,7 @@ export class DespesaService {
         }
     }
 
-    async create(data: DespesaDTO){
+    async create(data: CreateDespesaDto){
         
         if(!(await this.exists(data))){
             const colaborador = await this.prisma.despesa.create({
@@ -56,7 +57,7 @@ export class DespesaService {
         return await this.prisma.despesa.findMany()
     }
 
-    async findOne(id: string) {
+    async findOne(id: number) {
         return await this.prisma.despesa.findUnique({
             where: {
                 idDespesa: id
@@ -64,7 +65,7 @@ export class DespesaService {
         })
     }
 
-    async update(id: string, data: DespesaDTO) {
+    async update(id: number, data: UpdateDespesaDto) {
         const despesaExiste = await this.prisma.despesa.findUnique({
             where: {
                 idDespesa: id
@@ -84,7 +85,7 @@ export class DespesaService {
 
     }
 
-    async delete(id: string) {
+    async delete(id: number) {
         const despesaExiste = await this.prisma.despesa.findUnique({
             where: {
                 idDespesa: id

@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/PrismaService';
-import { ColaboradorDTO } from './colaborador.dto';
+import { CreateColaboradorDto } from './dto/create-colaborador.dto';
+import { UpdateColaboradorDto } from './dto/update-colaborador.dto';
+
 
 @Injectable()
 export class ColaboradorService {
 
     constructor(private prisma: PrismaService) {}
 
-    async exists(data: ColaboradorDTO){
+    async exists(data: CreateColaboradorDto){
         const colaboradorExists = await this.prisma.colaborador.findFirst({
             where: data
         })
@@ -19,7 +21,7 @@ export class ColaboradorService {
         }
     }
 
-    async create(data: ColaboradorDTO){
+    async create(data: CreateColaboradorDto){
         
         if(!(await this.exists(data))){
             const colaborador = await this.prisma.colaborador.create({
@@ -37,7 +39,8 @@ export class ColaboradorService {
         return await this.prisma.colaborador.findMany()
     }
 
-    async findOne(id: string) {
+    async findOne(id: number) {
+        console.log(typeof id)
         return await this.prisma.colaborador.findUnique({
             where: {
                 idColaborador: id
@@ -45,7 +48,7 @@ export class ColaboradorService {
         })
     }
 
-    async update(id: string, data: ColaboradorDTO) {
+    async update(id: number, data: UpdateColaboradorDto) {
         const colaboradorExists = await this.prisma.colaborador.findUnique({
             where: {
                 idColaborador: id
@@ -65,7 +68,7 @@ export class ColaboradorService {
 
     }
 
-    async delete(id: string) {
+    async delete(id: number) {
         const colaboradorExists = await this.prisma.colaborador.findUnique({
             where: {
                 idColaborador: id
