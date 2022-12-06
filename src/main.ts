@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Documentação com Swagger - Api Paytrack')
+    .setTitle('Documentação Api Paytrack')
     .setDescription('Api para cadastrar, deletar, editar e buscar despesas')
     .setVersion('1.0')
     .addTag('Colaboradores')
