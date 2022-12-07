@@ -21,6 +21,6 @@ async function bootstrap() {
 
   app.enableCors()
   app.use(helmet())
-  await app.listen(3000,'GBTI1259W10');
+  await app.listen(3000, process.env.HOST);
 }
 bootstrap();
