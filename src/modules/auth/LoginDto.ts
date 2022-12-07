@@ -1,8 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class LoginDto{
-    @ApiProperty()
+    @ApiProperty({
+        description:'Registro do colaborador',
+        example:'40553'
+    })
     registro: string;
-    @ApiProperty()
+    @ApiProperty({
+        description:'Senha do colaborador',
+        example:'1234'
+    })
     senha: string;
 }

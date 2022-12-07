@@ -2,7 +2,7 @@
 CREATE TABLE "colaboradores" (
     "idColaborador" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "nome" TEXT NOT NULL,
-    "resgistro" TEXT NOT NULL,
+    "registro" TEXT NOT NULL,
     "senha" TEXT NOT NULL,
     "saldo" REAL NOT NULL DEFAULT 0.00,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -36,4 +36,4 @@ CREATE TABLE "Despesas" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "colaboradores_resgistro_key" ON "colaboradores"("resgistro");
+CREATE UNIQUE INDEX "colaboradores_registro_key" ON "colaboradores"("registro");

@@ -14,7 +14,7 @@ model Colaborador {
   senha         String
   saldo         Float     @default(0.00)
   createdAt     DateTime  @default(now())
-  updatedAt     DateTime
+  updatedAt     DateTime  @updatedAt
   idTipo        Int
   Despesa       Despesa[]
 
@@ -36,7 +36,7 @@ model Despesa {
   idMoeda        Int
   valor          Float
   createdAt      DateTime  @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime  @updatedAt
   dataDespesa    DateTime
   localDespesa   String
   comentario     String?

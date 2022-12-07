@@ -1,9 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateTipoDespesaDto {
-    @ApiProperty()
+    @ApiProperty({
+        description:'ID do tipo de despesa',
+        example:'1'
+    })
     idTipo:             number;
 
-    @ApiProperty()
+    @ApiProperty({
+        description:'Descrição do tipo de despesa',
+        example:'Viagem'
+    })
     descricaoTipo:      string;
 }

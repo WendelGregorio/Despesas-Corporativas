@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/database/PrismaService';
+import { MessageHelper } from 'src/helpers/messages.helper';
 import { CreateColaboradorDto } from './dto/create-colaborador.dto';
 import { UpdateColaboradorDto } from './dto/update-colaborador.dto';
 
@@ -9,38 +10,62 @@ export class ColaboradorService {
 
     constructor(private prisma: PrismaService) {}
 
-    async exists(data: CreateColaboradorDto){
+    async colaboradorExists(idColaborador: number){
         const colaboradorExists = await this.prisma.colaborador.findFirst({
-            where: data
+            where: {
+                idColaborador
+            }
         })
         
         if(colaboradorExists){
             return true;
         }else{
-            return false;
+            throw new Error(MessageHelper.COLABORADOR_NOT_FOUND);
+        }
+    }
+
+    async exists(data: CreateColaboradorDto){
+        const colaboradorExists = await this.prisma.colaborador.findFirst({
+            where: data
+        })
+        
+        if(!colaboradorExists){
+            return true;
+        }else{
+            throw new Error(MessageHelper.COLABORADOR_ALREDY_EXISTS);
         }
     }
 
     async create(data: CreateColaboradorDto){
         
-        if(!(await this.exists(data))){
+        if(await this.exists(data)){
             const colaborador = await this.prisma.colaborador.create({
                 data,
             });
     
             return colaborador;
         }else{
-            throw new Error("Colaborador já existe!")    
+            throw new Error(MessageHelper.COLABORADOR_ALREDY_EXISTS)    
         }
        
     }
 
-    async findAll() {
-        return await this.prisma.colaborador.findMany()
+    async findAll(user: any) {
+        console.log(user)
+        const colaborador = await this.prisma.colaborador.findUnique({
+            where: {
+                idColaborador: user.userId
+            }
+        })
+        if(colaborador.idTipo == 1){
+            return await this.prisma.colaborador.findMany()
+        }else{
+            throw new UnauthorizedException(MessageHelper.INVALID_ACTION)
+        }
+        
     }
 
     async findOne(id: number) {
-        console.log(typeof id)
         return await this.prisma.colaborador.findUnique({
             where: {
                 idColaborador: id
@@ -48,41 +73,47 @@ export class ColaboradorService {
         })
     }
 
-    async update(id: number, data: UpdateColaboradorDto) {
-        const colaboradorExists = await this.prisma.colaborador.findUnique({
-            where: {
-                idColaborador: id
+    async update(idColaborador: number,userToUpdateId: number, data: UpdateColaboradorDto) {
+        const colaborador = await this.prisma.colaborador.findFirst({
+            where:{
+                idColaborador
             }
         })
 
-        if(!colaboradorExists) {
-            throw new Error("Colaborador não existe")
+        if(colaborador.idTipo == 1){
+    
+            await this.colaboradorExists(userToUpdateId)
+    
+            return await this.prisma.colaborador.update({
+                data,
+                where: {
+                    idColaborador: userToUpdateId
+                }
+            })
+        }else{
+            throw new UnauthorizedException(MessageHelper.INVALID_ACTION)
         }
-
-        return await this.prisma.colaborador.update({
-            data,
-            where: {
-                idColaborador: id
-            }
-        })
-
     }
 
-    async delete(id: number) {
-        const colaboradorExists = await this.prisma.colaborador.findUnique({
-            where: {
-                idColaborador: id
+    async delete(idColaborador: number, userToDeleteId: number) {
+        const colaborador = await this.prisma.colaborador.findFirst({
+            where:{
+                idColaborador
             }
         })
+        
+        if(colaborador.idTipo == 1){
 
-        if(!colaboradorExists) {
-            throw new Error("Colaborador não existe")
+            await this.colaboradorExists(userToDeleteId)
+    
+            return await this.prisma.colaborador.delete({
+                where: {
+                    idColaborador: userToDeleteId
+                }
+            })
+        }else{
+            throw new UnauthorizedException(MessageHelper.INVALID_ACTION)
         }
-
-        return await this.prisma.colaborador.delete({
-            where: {
-                idColaborador: id
-            }
-        })
+        
     }
 }

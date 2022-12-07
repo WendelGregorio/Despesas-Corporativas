@@ -34,7 +34,7 @@ export class CreateColaboradorDto {
     @ApiProperty({
         description:'O campo updatedAt server apenas para registrar quando as informações do colaborador foram atualizadas'
     })
-    updatedAt:      Date;
+    updatedAt?:  Date = new Date();
 
     @ApiProperty({
         description:'O idTipo serve para identificar o tipo de colaborador e as permissões e restrições do mesmo',

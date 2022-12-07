@@ -20,7 +20,15 @@ export class DespesaService {
     }
 
     async create(data: CreateDespesaDto){
-        
+        const tipoExiste = await this.prisma.tipoDespesa.findFirst({
+            where: {
+                idTipo: data.IdTipoDespesa
+            }
+        })
+
+        if(!tipoExiste){
+            throw new Error("Tipo de despesa inválido!") 
+        }
         if(!(await this.exists(data))){
             const colaborador = await this.prisma.despesa.create({
                 data:{

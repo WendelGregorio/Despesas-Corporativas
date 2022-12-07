@@ -1,7 +1,6 @@
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy,ExtractJwt } from "passport-jwt";
 import { Injectable } from '@nestjs/common'
-import { ApiPayloadTooLargeResponse } from "@nestjs/swagger";
 
 
 @Injectable()
@@ -15,6 +14,6 @@ export class JwtStrategy extends PassportStrategy(Strategy){
     }
 
     async validate(payload: any) {
-        return { userId: payload.id, userRegistro: payload.registro, userType: payload.colaboradorType}
+        return { userId: payload.id, userRegistro: payload.registro}
     }
 }

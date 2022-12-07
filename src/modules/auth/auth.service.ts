@@ -6,13 +6,12 @@ import { CreateColaboradorDto } from '../colaborador/dto/create-colaborador.dto'
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly ColaboradorService: CreateColaboradorDto, private prisma: PrismaService, private readonly jwtService: JwtService) {}
+    constructor(private prisma: PrismaService, private readonly jwtService: JwtService) {}
 
     async login(colaborador){
         const payload = { 
             id: colaborador.idColaborador, 
-            registro: colaborador.registro,
-            colaboradorType: colaborador.idTipo
+            registro: colaborador.registro
         }
         
         return {
