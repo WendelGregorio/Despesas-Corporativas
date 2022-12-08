@@ -35,14 +35,14 @@ export class ColaboradorController {
     return this.colaboradorService.findAll(req.user);    
   }
 
-  @Get("getOne")
+  @Get("getOne/:id")
   @UseGuards(AuthGuard('jwt'))
   @ApiCreatedResponse({
     description: 'Retorna um objeto colaborador',
     type: CreateColaboradorDto
   })
-  async findOne(@Req() req: any) {
-    return this.colaboradorService.findOne(req.user.userId);
+  async findOne(@Req() req: any, @Param("id", ParseIntPipe) id: number) {
+    return this.colaboradorService.findOne(req.user.userId, id);
   }
 
   @Put("update/:id")
@@ -62,7 +62,6 @@ export class ColaboradorController {
     type: CreateColaboradorDto
   })
   async delete(@Req() req: any, @Param("id", ParseIntPipe) id: number) {
-    return await this.colaboradorService.delete(req.user.userId, id);
-    
+    return await this.colaboradorService.delete(req.user.userId, id);    
   }
 }

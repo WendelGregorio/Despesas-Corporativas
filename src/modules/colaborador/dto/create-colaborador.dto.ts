@@ -2,6 +2,16 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateColaboradorDto {
 
+    constructor(colaborador?: Partial<CreateColaboradorDto>){
+        this.nome = colaborador?.nome
+        this.registro = colaborador?.registro
+        this.senha   = colaborador?.senha
+        this.saldo = colaborador?.saldo
+        this.createdAt = colaborador?.createdAt
+        this.updatedAt = colaborador?.updatedAt
+        this.idTipo = colaborador?.idTipo
+    }
+
     @ApiProperty({
         description:'Nome do colaborador',
         example:'Wendel Gregorio'
