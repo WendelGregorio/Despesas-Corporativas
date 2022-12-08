@@ -28,6 +28,7 @@ export class ColaboradorService {
     }
 
     async create(data: CreateColaboradorDto){
+        console.log('AAAAAAAAAAAAAAAAAAA')
         try {
             const colaboradorExists = await this.prisma.colaborador.findFirst({
                 where: data
@@ -37,7 +38,7 @@ export class ColaboradorService {
                 const colaborador = await this.prisma.colaborador.create({
                     data,
                 });
-        
+                console.log(colaborador)
                 return colaborador;
             }else{
                 throw new BadRequest(MessageHelper.COLABORADOR_ALREDY_EXISTS)  

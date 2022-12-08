@@ -78,8 +78,8 @@ describe('ColaboradorService', () => {
             saldo:550,
             idTipo: 2 
         }
+
         const result = await colaboradorController.create(body);
-        console.log(result)
         // Assert
         expect(result).toEqual(newColaboradorEntity)
     })
