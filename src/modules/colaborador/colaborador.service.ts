@@ -1,4 +1,5 @@
 import { Injectable,UnauthorizedException, HttpStatus } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../database/PrismaService';
 import { BadRequest } from '../../errors/BadRequest';
@@ -11,7 +12,7 @@ import { UpdateColaboradorDto } from './dto/update-colaborador.dto';
 @Injectable()
 export class ColaboradorService {
 
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService,  private readonly jwtService: JwtService) {}
 
     async colaboradorExists(idColaborador: number){
         const colaboradorExists = await this.prisma.colaborador.findFirst({
@@ -21,14 +22,17 @@ export class ColaboradorService {
         })
         
         if(colaboradorExists){
+
+            this.prisma.$disconnect()
             return true;
         }else{
+            
+            this.prisma.$disconnect()
             throw new HttpError(HttpStatus.NOT_FOUND,'NOT_FOUND', MessageHelper.COLABORADOR_NOT_FOUND)
         }
     }
 
     async create(data: CreateColaboradorDto){
-        console.log('AAAAAAAAAAAAAAAAAAA')
         try {
             const colaboradorExists = await this.prisma.colaborador.findFirst({
                 where: data
@@ -38,8 +42,14 @@ export class ColaboradorService {
                 const colaborador = await this.prisma.colaborador.create({
                     data,
                 });
-                console.log(colaborador)
-                return colaborador;
+                const payload = { 
+                    id: colaborador.idColaborador, 
+                    registro: colaborador.registro
+                }
+                
+                return {
+                    token: this.jwtService.sign(payload)
+                }
             }else{
                 throw new BadRequest(MessageHelper.COLABORADOR_ALREDY_EXISTS)  
             }    
@@ -48,9 +58,9 @@ export class ColaboradorService {
                 throw new BadRequest(MessageHelper.COLABORADOR_BAD_DATA)
             }
             throw new HttpError(error.status, error.errorType, error.message)
+        } finally {
+            this.prisma.$disconnect()
         }
-        
-       
     }
 
     async findAll(user: any) {
@@ -70,9 +80,9 @@ export class ColaboradorService {
                 throw new BadRequest(MessageHelper.COLABORADOR_BAD_DATA)
             }
             throw new HttpError(error.status, error.errorType, error.message)
-        }
-        
-        
+        } finally {
+            this.prisma.$disconnect()
+        }   
     }
 
     async findOne(userId: number, userIdToFind: number) {
@@ -88,7 +98,7 @@ export class ColaboradorService {
                 if(!colaboradorFind){
                     throw new HttpError(HttpStatus.NOT_FOUND,'NOT_FOUND', MessageHelper.COLABORADOR_NOT_FOUND)
                 }
-
+                
                 return colaboradorFind
             }else{
                 const colaborador = await this.prisma.colaborador.findFirst({
@@ -102,7 +112,7 @@ export class ColaboradorService {
                 }
 
                 if(colaborador.idTipo === 1){
-                    const colaboradorFind = await this.prisma.colaborador.findUnique({
+                    const colaboradorFind = await this.prisma.colaborador.findFirst({
                         where: {
                             idColaborador: userIdToFind
                         }
@@ -121,7 +131,9 @@ export class ColaboradorService {
                 throw new BadRequest(MessageHelper.COLABORADOR_BAD_DATA)
             }
             throw new HttpError(error.status, error.errorType, error.message)
-        }        
+        } finally {
+            this.prisma.$disconnect()
+        }   
     }
 
     async update(idColaborador: number,userToUpdateId: number, data: UpdateColaboradorDto) {
@@ -150,6 +162,8 @@ export class ColaboradorService {
                 throw new BadRequest(MessageHelper.COLABORADOR_BAD_DATA)
             }
             throw new HttpError(error.status, error.errorType, error.message)
+        } finally {
+            this.prisma.$disconnect()
         }
     }
 
@@ -182,6 +196,8 @@ export class ColaboradorService {
                 throw new BadRequest(MessageHelper.COLABORADOR_BAD_DATA)
             }
             throw new HttpError(error.status, error.errorType, error.message)
+        } finally {
+            this.prisma.$disconnect()
         }
     }
 }

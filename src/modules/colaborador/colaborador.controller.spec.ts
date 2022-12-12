@@ -13,15 +13,21 @@ const colaboradorList: CreateColaboradorDto[] = [
     })
 ]
 
-const newColaboradorEntity = new CreateColaboradorDto({
-    nome:"Jonas",
-    registro:"5",
-    senha:"5",
-    saldo:550,
-    idTipo: 2
-})
+const colaborador: CreateColaboradorDto = new CreateColaboradorDto({
+      nome: "Jorge",
+      registro: "0002",
+      senha: "0002"
+  })
 
-describe('ColaboradorService', () => {
+type tokenJWT = {
+  token: string;
+}
+
+const token: tokenJWT = {
+  token:"asdofijioavmzxcnnlkajfasd"
+}
+
+describe('ColaboradorController', () => {
   let colaboradorController: ColaboradorController;
   let colaboradorService: ColaboradorService;
 
@@ -32,10 +38,10 @@ describe('ColaboradorService', () => {
         provide:ColaboradorService,
         useValue:{
             findAll: jest.fn().mockResolvedValue(colaboradorList),
-            findOne: jest.fn().mockResolvedValue(newColaboradorEntity),
-            create: jest.fn(),
-            update: jest.fn(),
-            delete: jest.fn(),
+            create: jest.fn().mockResolvedValue(token),
+            findOne: jest.fn().mockResolvedValue(colaborador),            
+            update: jest.fn().mockResolvedValue(colaborador),
+            delete: jest.fn().mockResolvedValue(colaborador),
         }
       }, PrismaService]
     }).compile();
@@ -56,6 +62,7 @@ describe('ColaboradorService', () => {
 
         // Assert
         expect(result).toEqual(colaboradorList)
+        expect(colaboradorService.findAll).toHaveBeenCalledTimes(1)
     })
 
     it('should throw an exception', () => {
@@ -69,20 +76,95 @@ describe('ColaboradorService', () => {
   })
 
   describe('create', () => {
-    it('should create a new colaborador successfully and return colaborador', async () => {
-        // Act
-        const body = { 
-            nome:"Jonas",
-            registro:"5",
-            senha:"5",
-            saldo:550,
-            idTipo: 2 
-        }
+    it('should create a new colaborador and return colaborador', async () => {
+      // Act
 
-        const result = await colaboradorController.create(body);
-        // Assert
-        expect(result).toEqual(newColaboradorEntity)
+      const data = {
+        nome:"Carlos",
+        registro:"30",
+        senha:"30",
+        saldo:500,
+        idTipo:2
+      }
+      const result = await colaboradorController.create(data);
+
+      // Assert
+      expect(result).toBe(token)
+      expect(colaboradorService.create).toHaveBeenCalledTimes(1)
+    })
+
+    it('should throw an exception', () => {
+      // Arrange
+      const data = {
+        nome:"Carlos",
+        registro:"30",
+        senha:"30",
+        saldo:500,
+        idTipo:2
+      }
+      jest.spyOn(colaboradorService, 'create').mockRejectedValueOnce(HttpError)
+
+      // Assert
+      expect(colaboradorController.create(data)).rejects.toThrowError()
+
     })
   })
 
+  describe('findOne', () => {
+    it('should return a colaborador', async () => {
+      // Act
+      const result = await colaboradorController.findOne({ user: {userId: 4, userRegistro: '40553'} }, 8);
+      // Assert
+      expect(result).toEqual(colaborador)
+      expect(colaboradorService.findOne).toHaveBeenCalledTimes(1)
+    })
+    it('should throw an exception', () => {
+      // Arrange
+      jest.spyOn(colaboradorService, 'findOne').mockRejectedValueOnce(HttpError)
+
+      // Assert
+      expect(colaboradorController.findOne({ user: {userId: 4, userRegistro: '40553'} }, 8)).rejects.toThrowError()
+
+    })
+  })
+
+  describe('update', () => {
+    it('should update a colaborador', async () => {
+      // Act
+      const result = await colaboradorController.update({ user: {userId: 4, userRegistro: '40553'} }, 8, { nome: "Jonas"});
+
+      // Assert
+      expect(result).toEqual(colaborador)
+      expect(colaboradorService.update).toHaveBeenCalledTimes(1)
+    })
+
+    it('should throw an exception', () => {
+      // Arrange
+      jest.spyOn(colaboradorService, 'update').mockRejectedValueOnce(HttpError)
+
+      // Assert
+      expect(colaboradorController.update({ user: {userId: 4, userRegistro: '40553'} }, 8, { nome: "Jonas"})).rejects.toThrowError()
+
+    })
+  })
+
+  describe('delete', () => {
+    it('should delete a colaborador', async () => {
+      // Act
+      const result = await colaboradorController.delete({ user: {userId: 4, userRegistro: '40553'} }, 3);
+
+      // Assert
+      expect(result).toEqual(colaborador)
+      expect(colaboradorService.delete).toHaveBeenCalledTimes(1)
+    })
+
+    it('should throw an exception', () => {
+      // Arrange
+      jest.spyOn(colaboradorService, 'delete').mockRejectedValueOnce(HttpError)
+
+      // Assert
+      expect(colaboradorController.delete({ user: {userId: 1, userRegistro: '40553'} }, 12)).rejects.toThrowError()
+
+    })
+  })
 });
