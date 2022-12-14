@@ -11,6 +11,7 @@ Uma aplicação para gerenciar despesas de viagens corporativas, uma API com ger
 
 ```bash
 $ npm install
+$ npx prisma migrate
 ```
 
 ## Executando a aplicação
